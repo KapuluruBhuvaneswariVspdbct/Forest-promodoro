@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garden Pomodoro</title>
+    <style>
+        body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    background-image: url(g.jpg);
+    background-size: cover;
+}
+
+.container {
+    display: flex;
+    width: 70%; /* Reduced width */
+    height: 60%; /* Reduced height */
+    background-color: #fff;
+    border-radius: 15px; /* Slightly smaller border-radius */
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+}
+
+.left-section, .right-section {
+    padding: 15px; /* Reduced padding */
+    box-sizing: border-box;
+}
+
+.left-section {
+    width: 55%; /* Reduced width */
+    border-right: 2px solid #ddd;
+}
+
+.right-section {
+    width: 45%; /* Adjusted width to fit container */
+    background-color: #e0ffe0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Reduced gap */
+    align-items: flex-start;
+}
+
+h1 {
+    color: #4CAF50;
+    font-size: 2rem; /* Reduced font size */
+    margin-top: 0;
+}
+
+#timeInput, #timerUnit, #timerDisplay {
+    font-size: 24px; /* Reduced font size */
+}
+
+#timeInput {
+    padding: 8px; /* Reduced padding */
+    border: 2px solid #4CAF50;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+#timerUnit {
+    margin-bottom: 20px;
+}
+
+#timerDisplay {
+    margin-bottom: 20px;
+    color: #ff5722;
+}
+
+.button-group {
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 12px 25px; /* Reduced button padding */
+    font-size: 18px; /* Reduced button font size */
+    margin: 8px; /* Reduced button margin */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#startButton {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#pauseButton {
+    background-color: #ff9800;
+    color: white;
+}
+
+#stopButton {
+    background-color: #f44336;
+    color: white;
+}
+
+#plantButton {
+    background-color: #2196F3;
+    color: white;
+    margin-top: 20px;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+#plantedTrees {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); /* Adjusted grid */
+    gap: 8px; /* Reduced gap */
+    width: 100%;
+    min-height: 150px; /* Reduced min-height */
+}
+
+.tree-image {
+    width: 80px; /* Reduced tree image size */
+    height: 120px; /* Reduced tree image height */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+@keyframes grow {
+    0% {
+        transform: scale(0);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="left-section">
+            <h1>CHERRY PROMODORO</h1>
+
+            <label for="timeInput" style="font-size: 1.5em;">Enter time:</label>
+            <br>
+            <input type="number" id="timeInput" min="1" value="1">
+            <br>
+
+            <label for="timerUnit" style="font-size: 1.5em;">Select time unit:</label>
+            <br>
+            <select id="timerUnit">
+                <option value="seconds">Seconds</option>
+                <option value="minutes">Minutes</option>
+                <option value="hours">Hours</option>
+            </select>
+            <br>
+
+            <div class="button-group">
+                <button id="startButton">Start</button>
+                <button id="pauseButton" disabled>Pause</button>
+                <button id="stopButton" disabled>Stop</button>
+            </div>
+
+            <p id="timerDisplay">Timer: 00:00:00</p>
+
+            <button id="plantButton" disabled>Plant Tree</button>
+        </div>
+
+        <div class="right-section">
+            <h1>TREES</h1>
+            <div id="plantedTrees"></div>
+        </div>
+    </div>
+
+    <script>
+        const startButton = document.getElementById('startButton');
+        const pauseButton = document.getElementById('pauseButton');
+        const stopButton = document.getElementById('stopButton');
+        const plantButton = document.getElementById('plantButton');
+        const timeInput = document.getElementById('timeInput');
+        const timerUnit = document.getElementById('timerUnit');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const plantedTrees = document.getElementById('plantedTrees');
+
+        let timer;
+        let timeLeft = 0;
+        let isPaused = false;
+
+        const backgroundColors = ['#ffdddd', '#ddffdd', '#ddddff', '#ffffdd', '#ffddff'];
+        let treeCounter = 0;
+
+        function formatTime(seconds) {
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            const secs = seconds % 60;
+            return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        function calculateSeconds(inputTime) {
+            const unit = timerUnit.value;
+            if (unit === 'seconds') return inputTime;
+            if (unit === 'minutes') return inputTime * 60;
+            if (unit === 'hours') return inputTime * 3600;
+            return inputTime;
+        }
+
+        // Start Timer Function
+        startButton.addEventListener('click', () => {
+            timeLeft = calculateSeconds(parseInt(timeInput.value)); // Convert input time to seconds
+            timerDisplay.textContent = `Timer: ${formatTime(timeLeft)}`;
+            plantButton.disabled = true;
+            startButton.disabled = true;
+            pauseButton.disabled = false;
+            stopButton.disabled = false;
+            isPaused = false;
+
+            timer = setInterval(() => {
+                if (!isPaused) {
+                    timeLeft--;
+                    timerDisplay.textContent = `Timer: ${formatTime(timeLeft)}`;
+
+                    if (timeLeft <= 0) {
+                        clearInterval(timer);
+                        timerDisplay.textContent = 'Time is up!';
+                        plantButton.disabled = false;
+                        pauseButton.disabled = true;
+                        stopButton.disabled = true;
+                    }
+                }
+            }, 1000);
+        });
+
+        // Pause Timer Function
+        pauseButton.addEventListener('click', () => {
+            isPaused = !isPaused;
+            pauseButton.textContent = isPaused ? "Resume" : "Pause";
+        });
+
+        // Stop Timer Function
+        stopButton.addEventListener('click', () => {
+            clearInterval(timer);
+            timerDisplay.textContent = 'Timer: 00:00:00';
+            startButton.disabled = false;
+            pauseButton.disabled = true;
+            stopButton.disabled = true;
+            plantButton.disabled = true;
+        });
+
+        // Plant Tree Function
+        plantButton.addEventListener('click', () => {
+            // Create tree image element
+            const treeImage = document.createElement('img');
+            treeImage.src = 'treee.png'; // Placeholder tree image, change to your own tree image
+            treeImage.classList.add('tree-image');
+
+            // Add tree to the grid (plantedTrees)
+            plantedTrees.appendChild(treeImage);
+
+            treeCounter++; // Increment the tree counter
+
+            // Reset buttons to allow the user to start the timer again
+            startButton.disabled = false;
+            pauseButton.disabled = true;
+            stopButton.disabled = true;
+            plantButton.disabled = true;
+        });
+    </script>
+
+</body>
+
+</html>
