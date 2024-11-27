@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cherry Pomodoro</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            background-image: url(g.jpg);
+            background-size: cover;
+        }
+
+        .header {
+            width: 100%;
+            background-color: #4CAF50;
+            padding: 10px;
+            color: white;
+            text-align: right;
+        }
+
+        .header button {
+            margin-left: 10px;
+        }
+
+        .container {
+            display: flex;
+            width: 70%;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+            margin: 50px auto; /* Center the container with margin */
+        }
+
+        .left-section,
+        .right-section {
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        .left-section {
+            width: 55%;
+            border-right: 2px solid #ddd;
+        }
+
+        .right-section {
+            width: 45%;
+            background-color: #e0ffe0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        h1 {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-top: 0;
+        }
+
+        .task-inputs,
+        #taskControls {
+            margin-bottom: 20px;
+        }
+
+        .task-inputs input {
+            margin: 5px 0;
+            padding: 8px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        #taskDropdown {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 5px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #addTaskButton {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        #deleteTaskButton {
+            background-color:  #4CAF50;
+            color: white;
+        }
+
+        #startButton {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        #pauseButton {
+            background-color: #ff9800;
+            color: white;
+        }
+
+        #stopButton {
+            background-color: #f44336;
+            color: white;
+        }
+
+        #plantButton {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        #plantedTrees {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 8px;
+            width: 100%;
+        }
+
+        .tree-image {
+            width: 80px;
+            height: 120px;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        #totalTrees {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .sub{
+            color:#086e0c
+        }
+            /* Card Section */
+            .card-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 40px;
+            margin-top: 40px;
+        }
+
+        .card {
+            display: flex;
+            width: 75%;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            margin-left:13%;
+        }
+
+        .card-text {
+            width: 60%;
+            padding: 20px;
+        }
+
+        .card img {
+            width: 20%;
+            height: 200px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        /* Dark Mode Styling for Cards */
+        .card.dark {
+            background-color: #333;
+            color: #fff;
+        }
+        .benifits{
+            margin-left:45%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <button onclick="location.href='login.html'">Login</button>
+        <button onclick="location.href='signup.html'">SignUp</button>
+    </div>
+    <div class="container">
+        <div class="left-section">
+            <h1>CHERRY POMODORO</h1>
+
+            <div class="task-inputs">
+                <br/>
+                <h2 class="sub">✅ADD TASK</h2>
+                <input id="taskNameInput" type="text" placeholder="Enter Task Name" />
+                <input id="timeInput" type="text" placeholder="Enter Time (hh:mm:ss)" />
+                <button id="addTaskButton">Add Task</button>
+            </div>
+            <div id="taskControls" style="display: none;">
+                <br/>
+            <h2 class="sub">👍READY TO FOCUS</h2>
+            <select id="taskDropdown"></select>
+                <p id="timerDisplay">Timer: 00:00:00</p>
+                <button id="startButton">Start</button>
+                <button id="pauseButton" disabled>Pause</button>
+                <button id="stopButton" disabled>Stop</button>
+                
+            <button id="deleteTaskButton" disabled>Delete Task</button>
+                <br/><br><br>
+                <h2 class="sub">💪READY TO PLANT TREE</h2>
+                <button id="plantButton" disabled>Plant Tree</button>
+            </div>
+        </div>
+        <div class="right-section">
+            <h1>TREES</h1>
+            <div id="totalTrees">Total Trees Planted: <span id="treeCount">0</span></div>
+            <div id="plantedTrees"></div>
+        </div>
+    </div><br>
+    <h1 style="color:#fff " class="benifits"><ul>BENIFITS</ul></h1>
+    
+    <!-- Card Section (Additional Information) -->
+    <div class="card-section">
+        <div class="card">
+            <img src="bhu_1 (1).jpg"  alt="Image 1">
+            <div class="card-text">
+                <h2>INCREASES MOTIVATION TO PLANT TREES</h2>
+                <p>This Website will motivate people to plant trees .</p>
+            </div>
+        </div><br>
+        <div class="card dark">
+            <img src="focus.png"  alt="Image 1">
+            <div class="card-text">
+                <h2>INCREASES FOCUS</h2>
+                <p>This website will increase the focus levels of people</p>
+            </div>
+        </div><br>
+    
+        <div class="card ">
+            <img src="plantdon.png" alt="Image 2">
+            <div class="card-text">
+                <h2>GET PLANT AS A GIFT</h2>
+                <p>If you have planted more than 50 plants per day you will get plant as a gift</p>
+            </div>
+        </div>
+       
+    </div>
+
+    <script>
+        const taskNameInput = document.getElementById('taskNameInput');
+        const timeInput = document.getElementById('timeInput');
+        const addTaskButton = document.getElementById('addTaskButton');
+        const taskDropdown = document.getElementById('taskDropdown');
+        const deleteTaskButton = document.getElementById('deleteTaskButton');
+        const taskControls = document.getElementById('taskControls');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const startButton = document.getElementById('startButton');
+        const pauseButton = document.getElementById('pauseButton');
+        const stopButton = document.getElementById('stopButton');
+        const plantButton = document.getElementById('plantButton');
+        const plantedTrees = document.getElementById('plantedTrees');
+        const treeCount = document.getElementById('treeCount');
+
+        let tasks = {};
+        let currentTask = null;
+        let totalTreesPlanted = 0;
+
+        function parseTime(timeString) {
+            const [hours, minutes, seconds] = timeString.split(':').map(Number);
+            if (
+                isNaN(hours) ||
+                isNaN(minutes) ||
+                isNaN(seconds) ||
+                hours < 0 ||
+                minutes < 0 ||
+                minutes >= 60 ||
+                seconds < 0 ||
+                seconds >= 60
+            ) {
+                return null;
+            }
+            return hours * 3600 + minutes * 60 + seconds;
+        }
+
+        function formatTime(seconds) {
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            const secs = seconds % 60;
+            return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        function resetTaskControls() {
+            timerDisplay.textContent = 'Timer: 00:00:00';
+            startButton.disabled = false;
+            pauseButton.disabled = true;
+            stopButton.disabled = true;
+            plantButton.disabled = true;
+        }
+
+        function updateTaskDropdown() {
+            taskDropdown.innerHTML = Object.keys(tasks)
+                .map((taskName) => `<option value="${taskName}">${taskName}</option>`)
+                .join('');
+        }
+
+        addTaskButton.addEventListener('click', () => {
+            const taskName = taskNameInput.value.trim();
+            const timeString = timeInput.value.trim();
+            const totalSeconds = parseTime(timeString);
+
+            if (!taskName || totalSeconds === null || tasks[taskName]) {
+                alert('Invalid task name or time format! Use hh:mm:ss.');
+                return;
+            }
+
+            tasks[taskName] = { timeLeft: totalSeconds, timer: null, isPaused: false, treesPlanted: 0 };
+            currentTask = taskName;
+            updateTaskDropdown();
+            taskDropdown.value = taskName;
+            resetTaskControls();
+            taskControls.style.display = 'block';
+            deleteTaskButton.style.display = 'inline-block';
+        });
+
+        taskDropdown.addEventListener('change', (e) => {
+            currentTask = e.target.value;
+            if (currentTask) {
+                resetTaskControls();
+                taskControls.style.display = 'block';
+                deleteTaskButton.style.display = 'inline-block';
+                treeCount.textContent = tasks[currentTask].treesPlanted;
+            }
+        });
+
+        deleteTaskButton.addEventListener('click', () => {
+            if (currentTask && confirm('Are you sure you want to delete this task?')) {
+                clearInterval(tasks[currentTask]?.timer);
+                delete tasks[currentTask];
+                currentTask = null;
+                updateTaskDropdown();
+                taskControls.style.display = 'none';
+                deleteTaskButton.style.display = 'none';
+                treeCount.textContent = '0';
+            }
+        });
+
+        startButton.addEventListener('click', () => {
+            const task = tasks[currentTask];
+            startButton.disabled = true;
+            pauseButton.disabled = false;
+            stopButton.disabled = false;
+
+            task.timer = setInterval(() => {
+                if (!task.isPaused) {
+                    task.timeLeft--;
+                    timerDisplay.textContent = `Timer: ${formatTime(task.timeLeft)}`;
+                    if (task.timeLeft <= 0) {
+                        clearInterval(task.timer);
+                        timerDisplay.textContent = 'Time is up!';
+                        plantButton.disabled = false;
+                        pauseButton.disabled = true;
+                        stopButton.disabled = true;
+                    }
+                }
+            }, 1000);
+        });
+
+        pauseButton.addEventListener('click', () => {
+            const task = tasks[currentTask];
+            task.isPaused = !task.isPaused;
+            pauseButton.textContent = task.isPaused ? 'Resume' : 'Pause';
+        });
+
+        stopButton.addEventListener('click', () => {
+            clearInterval(tasks[currentTask]?.timer);
+            resetTaskControls();
+        });
+
+        plantButton.addEventListener('click', () => {
+            const treeImage = document.createElement('div');
+            treeImage.className = 'tree-image';
+            treeImage.style.backgroundImage = 'url("treee.png")';
+            plantedTrees.appendChild(treeImage);
+            tasks[currentTask].treesPlanted++;
+            totalTreesPlanted++;
+            treeCount.textContent = tasks[currentTask].treesPlanted;
+            resetTaskControls();
+        });
+    </script>
+</body>
+
+</html>
