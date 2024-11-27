@@ -100,7 +100,7 @@
         }
 
         #deleteTaskButton {
-            background-color:  #4CAF50;
+            background-color: #4CAF50;
             color: white;
         }
 
@@ -148,11 +148,13 @@
             margin-top: 10px;
             font-weight: bold;
         }
-        .sub{
-            color:#086e0c
+
+        .sub {
+            color: #086e0c;
         }
-            /* Card Section */
-            .card-section {
+
+        /* Card Section */
+        .card-section {
             display: flex;
             flex-direction: column;
             gap: 20px;
@@ -165,8 +167,8 @@
             width: 75%;
             background-color: #fff;
             border-radius: 10px;
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-            margin-left:13%;
+            box-shadow: 0px  4px 12px rgba(0, 0, 0, 0.1);
+            margin-left: 13%;
         }
 
         .card-text {
@@ -186,8 +188,9 @@
             background-color: #333;
             color: #fff;
         }
-        .benifits{
-            margin-left:45%;
+
+        .benifits {
+            margin-left: 45%;
         }
     </style>
 </head>
@@ -202,23 +205,23 @@
             <h1>CHERRY POMODORO</h1>
 
             <div class="task-inputs">
-                <br/>
+                <br />
                 <h2 class="sub">✅ADD TASK</h2>
                 <input id="taskNameInput" type="text" placeholder="Enter Task Name" />
                 <input id="timeInput" type="text" placeholder="Enter Time (hh:mm:ss)" />
                 <button id="addTaskButton">Add Task</button>
             </div>
             <div id="taskControls" style="display: none;">
-                <br/>
-            <h2 class="sub">👍READY TO FOCUS</h2>
-            <select id="taskDropdown"></select>
+                <br />
+                <h2 class="sub">👍READY TO FOCUS</h2>
+                <select id="taskDropdown"></select>
                 <p id="timerDisplay">Timer: 00:00:00</p>
                 <button id="startButton">Start</button>
                 <button id="pauseButton" disabled>Pause</button>
                 <button id="stopButton" disabled>Stop</button>
-                
-            <button id="deleteTaskButton" disabled>Delete Task</button>
-                <br/><br><br>
+
+                <button id="deleteTaskButton" disabled>Delete Task</button>
+                <br /><br><br>
                 <h2 class="sub">💪READY TO PLANT TREE</h2>
                 <button id="plantButton" disabled>Plant Tree</button>
             </div>
@@ -230,33 +233,34 @@
         </div>
     </div><br>
     <h1 style="color:#fff " class="benifits"><ul>BENIFITS</ul></h1>
-    
+
     <!-- Card Section (Additional Information) -->
     <div class="card-section">
         <div class="card">
-            <img src="bhu_1 (1).jpg"  alt="Image 1">
+            <img src="bhu_1 (1).jpg" alt="Image 1">
             <div class="card-text">
                 <h2>INCREASES MOTIVATION TO PLANT TREES</h2>
-                <p>This Website will motivate people to plant trees .</p>
+                <p>This Website will motivate people to plant trees.</p>
             </div>
         </div><br>
         <div class="card dark">
-            <img src="focus.png"  alt="Image 1">
+            <img src="focus.png" alt="Image 1">
             <div class="card-text">
                 <h2>INCREASES FOCUS</h2>
-                <p>This website will increase the focus levels of people</p>
+                <p>This website will increase the focus levels of people.</p>
             </div>
         </div><br>
-    
+
         <div class="card ">
             <img src="plantdon.png" alt="Image 2">
             <div class="card-text">
                 <h2>GET PLANT AS A GIFT</h2>
-                <p>If you have planted more than 50 plants per day you will get plant as a gift</p>
+                <p>If you have planted more than 50 plants per day you will get a plant as a gift.</p>
             </div>
         </div>
-       
     </div>
+
+    <audio id="ringSound" src="ring.mp3" preload="auto"></audio> <!-- Add your sound file here -->
 
     <script>
         const taskNameInput = document.getElementById('taskNameInput');
@@ -270,8 +274,9 @@
         const pauseButton = document.getElementById('pauseButton');
         const stopButton = document.getElementById('stopButton');
         const plantButton = document.getElementById('plantButton');
-        const plantedTrees = document.getElementById('plantedTrees');
+ const plantedTrees = document.getElementById('plantedTrees');
         const treeCount = document.getElementById('treeCount');
+        const ringSound = document.getElementById('ringSound');
 
         let tasks = {};
         let currentTask = null;
@@ -369,6 +374,7 @@
                     if (task.timeLeft <= 0) {
                         clearInterval(task.timer);
                         timerDisplay.textContent = 'Time is up!';
+                        ringSound.play(); // Play the ringing sound
                         plantButton.disabled = false;
                         pauseButton.disabled = true;
                         stopButton.disabled = true;
@@ -398,6 +404,7 @@
             treeCount.textContent = tasks[currentTask].treesPlanted;
             resetTaskControls();
         });
+    
     </script>
 </body>
 
